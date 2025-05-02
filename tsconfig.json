@@ -1,0 +1,23 @@
+{
+  "extends": "./node_modules/@vue/tsconfig/tsconfig.json",
+  "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "strict": true,
+      "allowJs": true,
+      "noImplicitAny": false,
+      "types": ["node", "vite/client"],
+      "paths": {
+          "@/*": ["./resources/js/*"],
+          "@assets/*": ["resources/assets/*"],
+          "@css/*": ["resources/css/*"]
+      },
+      "baseUrl": ".",
+      "moduleResolution": "bundler"
+  },
+  "include": [
+      "resources/**/*.ts",
+      "resources/**/*.d.ts",
+      "resources/**/*.vue"
+  ]
+}

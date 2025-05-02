@@ -6,17 +6,27 @@
         "dev": "vite"
     },
     "devDependencies": {
+        "@types/node": "^22.15.3",
+        "@vitejs/plugin-vue": "^5.2.3",
+        "@vue/tsconfig": "^0.7.0",
         "autoprefixer": "^10.4.20",
         "axios": "^1.7.4",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.2.0",
         "postcss": "^8.4.47",
+        "sass-embedded": "^1.87.0",
         "tailwindcss": "^3.4.13",
-        "vite": "^6.0.11"
+        "typescript": "^5.8.3",
+        "vite": "^6.0.11",
+        "vue-tsc": "^2.2.10"
     },
     "dependencies": {
-        "@vitejs/plugin-vue": "^5.2.3",
+        "@fortawesome/fontawesome-free": "^6.7.2",
         "dotenv": "^16.4.7",
+        "notyf": "^3.10.0",
+        "pinia": "^3.0.2",
+        "pinia-plugin-persistedstate": "^4.2.0",
+        "tw-elements": "^2.0.0",
         "vue": "^3.5.13",
         "vue-router": "^4.5.1"
     }

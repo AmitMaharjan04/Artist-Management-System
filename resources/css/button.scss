@@ -1,0 +1,40 @@
+.button {
+  @apply px-5 py-2 inline-block text-xs rounded shadow-md hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-2 active:shadow-lg transition duration-150 ease-in-out disabled:cursor-not-allowed disabled:opacity-60 bg-[#e3e8ef];
+}
+
+.button-disabled {
+  @apply disabled:cursor-not-allowed disabled:opacity-60 bg-[#e3e8ef];
+}
+
+.button-primary {
+  @apply bg-[#266FC1] text-white hover:bg-[#266FC1];
+}
+
+.button-success {
+  @apply bg-green-500 text-white hover:bg-green-500;
+}
+
+.button-danger {
+  @apply bg-red-500 text-white hover:bg-red-500;
+}
+
+
+.button-xs {
+  @apply text-xs px-2 py-1;
+}
+
+.button-sm {
+  @apply text-xs px-3 py-1.5;
+}
+
+.button-md {
+  @apply text-sm px-4 py-2;
+}
+
+.button-lg {
+  @apply text-base px-5 py-2.5;
+}
+
+.button-xl {
+  @apply text-base px-6 py-3;
+}

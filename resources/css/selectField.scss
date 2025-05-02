@@ -1,0 +1,36 @@
+.select {
+    @apply w-full rounded border border-stroke bg-white py-3 px-4;
+}
+
+.select-dropdown {
+    @apply absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded border border-stroke bg-white shadow-md;
+
+    input {
+        @apply fixed w-auto rounded border-b border-stroke bg-red py-2 px-4 outline-none;
+    }
+}
+
+.focus {
+    @apply outline-none ring-1 ring-blue-500;
+}
+
+.error {
+    @apply bg-red-50 border-red-500 text-red-900 placeholder-red-700 focus:ring-red-500 active:ring-red-500
+     focus:border-red-500;
+}
+
+.input-lg {
+    @apply p-3;
+}
+
+.input-md {
+    @apply p-2.5 text-sm;
+}
+
+.input-sm {
+    @apply p-2 text-sm;
+}
+
+.input-xs {
+    @apply p-1 text-sm;
+}
