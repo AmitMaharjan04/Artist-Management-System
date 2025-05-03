@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\JwtMiddleware;
@@ -21,5 +22,14 @@ Route::middleware([JwtMiddleware::class])->group(function () {
         Route::get('show',[UserController::class,'show']);
         Route::patch('update',[UserController::class,'update']);
         Route::delete('delete',[UserController::class,'delete']);
+    });
+
+    Route::prefix('artists')->group(function () {
+        Route::get('list', [ArtistController::class, 'index']);
+        Route::post('store',[ArtistController::class,'store']);
+        Route::get('show',[ArtistController::class,'show']);
+        Route::patch('update',[ArtistController::class,'update']);
+        Route::delete('delete',[ArtistController::class,'delete']);
+        Route::post('imports',[ArtistController::class,'import']);
     });
 });

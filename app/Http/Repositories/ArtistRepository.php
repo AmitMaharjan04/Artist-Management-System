@@ -2,12 +2,11 @@
 
 namespace App\Http\Repositories;
 
-use App\Http\Repositories\Interfaces\UserInterface;
-use App\Models\User;
+use App\Http\Repositories\Interfaces\ArtistInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
-class UserRepository implements UserInterface
+class ArtistRepository implements ArtistInterface
 {
 
     public function create(array $data): object
@@ -16,10 +15,10 @@ class UserRepository implements UserInterface
         $placeholders = implode(', ', array_fill(0, count($data), '?'));
         $values = array_values($data);
 
-        DB::insert("INSERT INTO user ($columns) VALUES ($placeholders)", $values);
+        DB::insert("INSERT INTO artist ($columns) VALUES ($placeholders)", $values);
 
         $id = DB::getPdo()->lastInsertId();
-        return DB::selectOne("SELECT * FROM user WHERE id = ?", [$id]);
+        return DB::selectOne("SELECT * FROM artist WHERE id = ?", [$id]);
     }
 
     public function update(int $id, array $data): object
@@ -28,14 +27,14 @@ class UserRepository implements UserInterface
         $values = array_values($data);
         $values[] = $id;
 
-        DB::update("UPDATE user SET $setClause WHERE id = ?", $values);
+        DB::update("UPDATE artist SET $setClause WHERE id = ?", $values);
 
-        return DB::selectOne("SELECT * FROM user WHERE id = ?", [$id]);
+        return DB::selectOne("SELECT * FROM artist WHERE id = ?", [$id]);
     }
 
     public function delete(int $id): bool
     {
-        return DB::delete("DELETE FROM user WHERE id = ?", [$id]) > 0;
+        return DB::delete("DELETE FROM artist WHERE id = ?", [$id]) > 0;
     }
 
     public function lists(int $page, int $perPage,  $sortField, $sortOrder, $filters = []): LengthAwarePaginator
@@ -46,22 +45,21 @@ class UserRepository implements UserInterface
         if (!empty($filters)) {
             $conditions = [];
             foreach ($filters as $key => $value) {
-                $conditions[] = $key === 'name' ? "CONCAT(first_name, ' ', last_name) LIKE ?" : "$key LIKE ?";
+                $conditions[] = "$key LIKE ?";
                 $params[] = "%$value%";
             }
             $whereClause = 'WHERE ' . implode(' AND ', $conditions);
         }
 
-        $sortFieldSql = ($sortField === 'name') ? "CONCAT(first_name, ' ', last_name)" : $sortField;
         // Get total count
-        $total = DB::selectOne("SELECT COUNT(*) as count FROM user $whereClause", $params)->count;
+        $total = DB::selectOne("SELECT COUNT(*) as count FROM artist $whereClause", $params)->count;
 
         // Get paginated data
         $offset = ($page - 1) * $perPage;
         $results = DB::select(
-            "SELECT id, `password`, email, phone, DATE(dob) as dob, gender, address, role_type, CONCAT(first_name, ' ', last_name) AS name FROM user 
+            "SELECT id, `name`, DATE(dob) as dob, gender, `address`, first_release_year, no_of_albums_released FROM artist 
              $whereClause 
-             ORDER BY $sortFieldSql $sortOrder 
+             ORDER BY $sortField $sortOrder 
              LIMIT ? OFFSET ?",
             [...$params, $perPage, $offset]
         );
@@ -75,13 +73,8 @@ class UserRepository implements UserInterface
         );
     }
 
-    public function findByEmail(string $email): ?object
-    {
-        return DB::selectOne("SELECT * FROM user WHERE email = ? limit 1", [$email]);
-    }
-
     public function find(int $id): ?object
     {
-        return DB::selectOne("SELECT id, first_name, last_name, `password`, email, phone, DATE(dob) as dob, gender, address, role_type FROM user WHERE id = ?", [$id]);
+        return DB::selectOne("SELECT id, `name`, DATE(dob) as dob, gender, `address`, first_release_year, no_of_albums_released FROM artist WHERE id = ?", [$id]);
     }
 }
