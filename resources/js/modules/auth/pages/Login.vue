@@ -84,7 +84,7 @@
                             :to="{ name: 'RegisterPage' }"
                             class="text-primary font-medium hover:underline"
                         >
-                            Sign Up
+                            Register
                         </router-link>
                     </p>
                 </div>
@@ -101,8 +101,11 @@ import { useForm } from "@/utils/useForm";
 import { useRouter } from "vue-router";
 import { LoginUser } from "../api/auth";
 import Button from "@/components/Button.vue";
+import { useAuthStore } from "@/stores/authStore";
+import { destroyInstance } from "@/composables/useApi";
 
 const router = useRouter();
+const authStore = useAuthStore();
 const submitLoading = ref(false);
 const disabledButton = ref(false);
 const formInfo = computed<FormField[]>(() => [
@@ -138,7 +141,12 @@ async function handleSubmit(_e: Event) {
     submitLoading.value = false;
     disabledButton.value = false;
     if (response.status === "1") {
-        router.push({ name: "Dashboard" });
+        authStore.setToken(response.response.token);
+        authStore.setSuperAdmin(response.response.superAdmin);
+        destroyInstance();
+        setTimeout(() => {
+            router.push({ name: "Dashboard" });
+        }, 1000);
         return;
     }
 

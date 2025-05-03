@@ -22,7 +22,7 @@ class UserRepository implements UserInterface
         return DB::selectOne("SELECT * FROM user WHERE id = ?", [$id]);
     }
 
-    public function update(int $id, array $data): User
+    public function update(int $id, array $data): object
     {
         $setClause = implode(', ', array_map(fn($key) => "$key = ?", array_keys($data)));
         $values = array_values($data);
@@ -46,19 +46,23 @@ class UserRepository implements UserInterface
         if (!empty($filters)) {
             $conditions = [];
             foreach ($filters as $key => $value) {
-                $conditions[] = "$key LIKE ?";
+                $conditions[] = $key === 'name' ? "CONCAT(first_name, ' ', last_name) LIKE ?" : "$key LIKE ?";
                 $params[] = "%$value%";
             }
             $whereClause = 'WHERE ' . implode(' AND ', $conditions);
         }
 
+        $sortFieldSql = ($sortField === 'name') ? "CONCAT(first_name, ' ', last_name)" : $sortField;
         // Get total count
         $total = DB::selectOne("SELECT COUNT(*) as count FROM user $whereClause", $params)->count;
 
         // Get paginated data
         $offset = ($page - 1) * $perPage;
         $results = DB::select(
-            "SELECT * FROM user $whereClause ORDER BY $sortField $sortOrder LIMIT ? OFFSET ?",
+            "SELECT *, CONCAT(first_name, ' ', last_name) AS name FROM user 
+             $whereClause 
+             ORDER BY $sortFieldSql $sortOrder 
+             LIMIT ? OFFSET ?",
             [...$params, $perPage, $offset]
         );
 
@@ -76,8 +80,8 @@ class UserRepository implements UserInterface
         return DB::selectOne("SELECT * FROM user WHERE email = ? limit 1", [$email]);
     }
 
-    public function find(int $id): ?User
+    public function find(int $id): ?object
     {
-        return DB::selectOne("SELECT * FROM user WHERE id = ?", [$id]);
+        return DB::selectOne("SELECT id, first_name, last_name, `password`, email, phone, DATE(dob) as dob, gender, address, role_type FROM user WHERE id = ?", [$id]);
     }
 }

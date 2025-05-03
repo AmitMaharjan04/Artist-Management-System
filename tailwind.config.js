@@ -23,6 +23,9 @@ export default {
                 current: "currentColor",
                 transparent: "transparent",
                 white: "#FFFFFF",
+                "boxdark-2": "#00000000",
+                strokedark: "#2E3A47",
+                boxdark: "#24303F",
                 black: {
                     ...colors.black,
                     DEFAULT: "#1C2434",

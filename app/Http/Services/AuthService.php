@@ -25,7 +25,7 @@ class AuthService
             'sub' => $user->id,
             'email' => $user->email,
             'iat' => time(),
-            'exp' => time() + (60 * 60),
+            'exp' => time() + (60 * 60 * 3),
         ];
 
         $token = JWT::encode($payload, config('app.jwt-key'), 'HS256');

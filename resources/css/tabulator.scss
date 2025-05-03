@@ -1,0 +1,282 @@
+@use "tabulator-tables/dist/css/tabulator_materialize.css";
+
+$activeRow: #dff0d8;
+$activeRowText: #000;
+$disabledRow: #fcf8e3;
+$disabledRowText: #000;
+$terminatedRow: #f2dede;
+$terminatedRowText: #000;
+$trialOverRow: #d9edf7;
+$trialOverRowText: #000;
+$installedRow: #fff;
+
+.tabulator {
+    border: 1px solid #ddd;
+    font-size: 13px !important;
+    border-radius: 7px !important;
+    user-select: none;
+}
+
+.tabulator-tableholder {
+    @apply bg-white dark:bg-boxdark-2;
+}
+
+.tabulator-tableholder .tabulator-footer {
+    @apply border-b border-r border-l border-stroke dark:border-strokedark;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.tabulator-table {
+    padding-bottom: 0px !important;
+}
+
+.tabulator-col-title:has(input[type="checkbox"]) {
+    width: fit-content !important;
+    margin: auto !important;
+}
+
+.tabulator-headers {
+    .tabulator-col {
+        @apply bg-black dark:bg-boxdark #{!important};
+        color: white;
+    }
+}
+
+.tabulator-tableholder {
+    height: fit-content !important;
+    // max-height: 65vh !important;
+    overflow-y: auto !important;
+}
+
+@media only screen and (min-width: 768px) {
+    .tabulator-tableholder {
+        max-height: 65vh !important;
+    }
+}
+
+.tabulator-header-contents {
+    @apply bg-black dark:bg-boxdark #{!important};
+}
+
+.tabulator-row-odd {
+    @apply bg-white dark:bg-boxdark #{!important};
+}
+
+.tabulator-row-even {
+    @apply bg-[#f4f4f8] dark:bg-black #{!important}
+}
+
+.row-danger {
+    background-color: $terminatedRow !important;
+}
+
+.row-warning {
+    background-color: $trialOverRow !important;
+}
+
+.row-info {
+    background-color: $disabledRow !important;
+}
+
+.row-success {
+    background-color: $activeRow !important;
+}
+
+.service-status-active {
+    background-color: $activeRow !important;
+}
+
+.service-status-disable {
+    background-color: $disabledRow !important;
+}
+
+.service-status-terminated {
+    background-color: $terminatedRow !important;
+}
+
+.service-status-trial-over {
+    background-color: $trialOverRow !important;
+}
+
+.service-status-installed {
+    background-color: white !important;
+}
+
+.status {
+    @apply px-2 py-1 text-xs font-semibold inline-block rounded cursor-default;
+    &.active {
+        @apply bg-green-500 text-white;
+    }
+    &.inactive {
+        @apply bg-red-600 text-white;
+    }
+}
+
+.row-pink-sherbet {
+    background-color: #ffc4c7 !important;
+}
+
+.row-peach {
+    background-color: #ffd2c1 !important;
+}
+
+.tabulator-row {
+    cursor: default !important;
+    min-height: 30px !important;
+    input[type="checkbox"] {
+        cursor: pointer !important;
+    }
+
+    &:last-of-type {
+        border: none !important;
+    }
+}
+
+.tabulator-selected {
+    background-color: #aaa !important;
+}
+
+// .tabulator-col-content input[type="text"]::-webkit-search-cancel-button {
+//   -webkit-appearance: searchfield-cancel-button;
+// }
+
+.tabulator-col-content {
+    padding: 12px 8px !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.81);
+    color: rgba(255, 255, 255, 0.81);
+    height: 100%;
+    font-weight: 600 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.table-many .tabulator-col-content {
+    padding: 10px 6px !important;
+}
+
+.tabulator-headers > .tabulator-col:first-of-type .tabulator-col-content {
+    padding-left: 10px !important;
+    border-left: none !important;
+}
+.tabulator-headers > .tabulator-col:last-of-type .tabulator-col-content {
+    padding-right: 10px !important;
+    border-right: none !important;
+}
+
+.tabulator[filter="true"] .tabulator-col-content {
+    &:not(:has(.tabulator-header-filter)) {
+        margin-top: 15px;
+    }
+    padding: 8px 15px !important;
+}
+
+.tabulator-col-title {
+    input[type="checkbox"] {
+        margin-top: 3px;
+    }
+}
+
+.tabulator-cell {
+    padding: 5px 15px !important;
+    height: 40px !important;
+    line-height: 27px;
+}
+
+.tabulator-arrow {
+    border-width: 4px !important;
+    display: none;
+    border-top-color: #aaa !important;
+    border-bottom-color: #aaa !important;
+}
+
+.tabulator-sortable[aria-sort="ascending"] {
+    .tabulator-arrow {
+        display: block;
+        border-bottom-color: white !important;
+        border-top-color: white !important;
+    }
+}
+
+.tabulator-sortable[aria-sort="descending"] {
+    .tabulator-arrow {
+        display: block;
+        border-top-color: white !important;
+    }
+}
+
+.tabulator-header-filter {
+    input {
+        border-radius: 3px !important;
+        max-width: 150px !important;
+        outline: none;
+        width: 100%;
+        background-color: white !important;
+        color: black !important;
+        font-weight: 400 !important;
+        padding: 5px 8px !important;
+    }
+    select {
+        border-radius: 3px !important;
+        max-width: 150px !important;
+        outline: none;
+        width: 100%;
+        background-color: white !important;
+        color: black !important;
+        font-weight: 400 !important;
+        padding: 7.5px 8px !important;
+    }
+    padding-top: 2px !important;
+    text-align: left !important;
+}
+
+.tabulator-col-sorter {
+    right: 0 !important;
+}
+
+.tabulator-header {
+    font-weight: normal !important;
+}
+
+.tabulator-page-size {
+    padding: 4px 6px !important;
+    background-color: #eee !important;
+    border: 1px solid #333;
+    outline: none;
+}
+
+@media screen and (max-width: 790px) {
+    .tabulator-footer-contents {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+}
+
+@media screen and (max-width: 1400px) {
+    .tabulator {
+        font-size: 13px !important;
+    }
+}
+
+.action-component {
+    display: flex;
+    span {
+        &:not(:first-child) {
+            margin-left: -4px;
+        }
+        width: 30px;
+        cursor: pointer;
+    }
+    img {
+        width: 30px;
+    }
+}
+
+.tabulator-tooltip {
+    background-color: white !important;
+    font-size: 15px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    box-shadow: 0px 1px 16px 2px rgba(0, 0, 0, 0.32);
+}

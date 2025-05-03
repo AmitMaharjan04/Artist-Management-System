@@ -26,6 +26,16 @@ class ApiResponseHelper
         return response()->json($data, $data['statusCode']);
     }
 
+    public static function success($message, $status = '1')
+    {
+        $data = [
+            'status'        => $status,
+            'statusCode'    => 200,
+            'message'       => $message
+        ];
+        return response()->json($data, $data['statusCode']);
+    }
+    
     public static function loginSuccessful($data, $token, $status = '1')
     {
         $data = [

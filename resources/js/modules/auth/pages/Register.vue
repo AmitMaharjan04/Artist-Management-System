@@ -5,7 +5,7 @@
         <div
             class="bg-white rounded-xl w-[400px] md:w-[600px] my-15 lg:w-[1000px] p-6"
         >
-            <div class="flex items-center mb-4">
+            <div class="flex items-center">
                 <h4
                     class="text-2xl font-semibold text-gray-900 dark:text-white"
                 >
