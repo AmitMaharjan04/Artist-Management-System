@@ -90,6 +90,7 @@ class SongRepository implements SongInterface
 
     public function find($data): ?object
     {
+        $data['artist_id'] = DB::selectOne("SELECT id FROM artist WHERE name = ? limit 1", [$data['artist_name']])->id;
         return DB::selectOne("SELECT artist_id, title, album_name, genre, created_at, updated_at FROM music WHERE artist_id = ? and updated_at = ?", [$data['artist_id'], $data['updated_at']]);
     }
 }

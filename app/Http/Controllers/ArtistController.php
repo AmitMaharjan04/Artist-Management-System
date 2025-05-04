@@ -61,6 +61,12 @@ class ArtistController extends Controller
     public function allArtists()
     {
         $artists = $this->artistRepository->allArtists();
+        $artists = array_map(function ($row) {
+            return [
+                'id'    => $row->id,
+                'name'  => $row->name,
+            ];
+        }, array: $artists);
         return ApiResponseHelper::getData($artists);
     }
 }

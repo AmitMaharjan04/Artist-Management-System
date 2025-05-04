@@ -49,7 +49,7 @@ class SongRequest extends FormRequest
 
         if ($this->isMethod('delete') || $this->isMethod('get')) {
             $rules = [
-                'artist_id'            =>   'required|exists:artist,id',
+                'artist_name'            =>   'required|exists:artist,name',
                 'updated_at'           =>   'required',
             ];
         }

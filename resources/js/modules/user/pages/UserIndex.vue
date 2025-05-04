@@ -16,16 +16,13 @@
         :columns="columns"
         :data-loader-function="loadData"
     />
-    <UserForm
-        ref="userForm"
-        @saved="userTable?.refreshTable"
-    />
+    <UserForm ref="userForm" @saved="userTable?.refreshTable" />
 </template>
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { useTemplateRef } from "vue";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 import ApiList from "@/api/apiList";
 import TabulatorTable from "@/components/TabulatorTable.vue";
@@ -36,8 +33,20 @@ import { Notify } from "@/utils/notify";
 import Button from "@/components/Button.vue";
 import UserForm from "@/modules/user/components/UserForm.vue";
 import { DeleteUser } from "@/modules/user/api/user";
+import { dateFilter, selectFilter } from "@/utils/tabulatorHeader";
 
 const router = useRouter();
+const genderOptions = [
+    { key: "m", value: "Male" },
+    { key: "f", value: "Female" },
+    { key: "o", value: "Others" },
+];
+
+const roleOptions = [
+    { key: "super_admin", value: "Super Admin" },
+    { key: "artist_manager", value: "Artist Manager" },
+    { key: "artist", value: "Artist" },
+];
 
 const userForm = useTemplateRef<InstanceType<any>>("userForm");
 const userTable =
@@ -76,15 +85,32 @@ const columns: any[] = [
     {
         title: "Date of Birth",
         field: "dob",
-        headerFilter: "input",
+        headerFilter: dateFilter,
+        headerFilterFunc: "=",
         headerFilterLiveFilter: false,
         minWidth: 150,
+        formatter: function (cell) {
+            const value = cell.getValue();
+            if (!value) return "";
+
+            try {
+                const date = new Date(value);
+                if (isNaN(date.getTime())) return "(invalid date)";
+                const day = date.getDate().toString().padStart(2, "0");
+                const month = (date.getMonth() + 1).toString().padStart(2, "0");
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            } catch {
+                return "(invalid date)";
+            }
+        },
     },
+
     {
         title: "Gender",
         field: "gender",
-        headerFilter: "input",
-        headerFilterLiveFilter: false,
+        headerFilter: selectFilter(genderOptions),
+        headerFilterFunc: "=",
         minWidth: 150,
         formatter: genderFormatter,
     },
@@ -98,7 +124,8 @@ const columns: any[] = [
     {
         title: "Role Type",
         field: "role_type",
-        headerFilter: "input",
+        headerFilter: selectFilter(roleOptions),
+        headerFilterFunc: "=",
         headerFilterLiveFilter: false,
         minWidth: 150,
     },
@@ -135,11 +162,10 @@ const columns: any[] = [
     },
 ];
 
-
 function genderFormatter(cell, formatterParams, onRendered) {
     if (cell.getValue() == "m") {
         return "Male";
-    } else if(cell.getValue() == "f") {
+    } else if (cell.getValue() == "f") {
         return "Female";
     } else {
         return "Others";
@@ -162,26 +188,21 @@ const loadData = async (params: any) => {
 
 const deleteData = (data: Record<string, any>) => {
     Swal.fire({
-    title: "Are you sure?",
-    text: "This action cannot be undone.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Yes, delete it!",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      const response = await DeleteUser(data.id);
-      if (response?.status === "1") {
-        Notify({ message: response.message });
-        userTable.value?.refreshTable();
-      } else {
-        Notify({
-          type: "error",
-          message: response.message,
-        });
-      }
-    }
-  });
+        title: "Are you sure?",
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            const response = await DeleteUser(data.id);
+            if (response?.status === "1") {
+                Notify({ message: response.message });
+                userTable.value?.refreshTable();
+            }
+        }
+    });
 };
 </script>

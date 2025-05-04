@@ -41,5 +41,6 @@ Route::middleware([JwtMiddleware::class])->group(function () {
         Route::get('show',[SongController::class,'show']);
         Route::patch('update',[SongController::class,'update']);
         Route::delete('delete',[SongController::class,'delete']);
+        Route::get('datas',[SongController::class,'datas']);
     });
 });

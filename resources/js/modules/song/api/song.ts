@@ -27,3 +27,7 @@ export const UpdateSong = async (
 export const DeleteSong = async (data: any) => {
     return await api().delete(ApiList.songDelete, { ...data });
 };
+
+export const GetAllSongData = async () => {
+    return await api().get<any>(ApiList.songDatas);
+};

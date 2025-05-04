@@ -3,7 +3,7 @@
         class="bg-gray-200 min-h-screen w-full flex items-center justify-center"
     >
         <div
-            class="bg-white rounded-xl w-[400px] md:w-[600px] my-15 lg:w-[1000px] p-6"
+            class="bg-white rounded-xl w-[400px] md:w-[600px] sm:my-12 md:my-15 lg:w-[1000px] p-6"
         >
             <div class="flex items-center">
                 <h4
@@ -240,10 +240,5 @@ async function handleSubmit(_e: Event) {
         }
         return;
     }
-    Notify({
-        message: response.message,
-        ripple: true,
-        type: "error",
-    });
 }
 </script>

@@ -169,11 +169,6 @@ const edit = async (data: any) => {
             formData.value["album_name"] = data.album_name;
             formData.value["genre"] = data.genre;
         }
-    } else {
-        Notify({
-            type: "error",
-            message: response.message,
-        });
     }
 };
 const store = async () => {
@@ -199,11 +194,6 @@ const store = async () => {
         }
         return;
     }
-    Notify({
-        message: response.message,
-        ripple: true,
-        type: "error",
-    });
 };
 
 const update = async () => {
@@ -229,11 +219,6 @@ const update = async () => {
         }
         return;
     }
-    Notify({
-        message: response.message,
-        ripple: true,
-        type: "error",
-    });
 };
 
 defineExpose({ openModal, edit });

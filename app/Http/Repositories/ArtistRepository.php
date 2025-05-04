@@ -80,12 +80,6 @@ class ArtistRepository implements ArtistInterface
 
     public function allArtists(): ?array
     {
-        $results = DB::select("SELECT id, `name` FROM artist");
-        return array_map(function ($row) {
-            return [
-                'id'    => $row->id,
-                'name'  => $row->name,
-            ];
-        }, array: $results);
+        return DB::select("SELECT id, `name` FROM artist");
     }
 }

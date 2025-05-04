@@ -175,11 +175,6 @@ const deleteData = (data: Record<string, any>) => {
             if (response?.status === "1") {
                 Notify({ message: response.message });
                 songTable.value?.refreshTable();
-            } else {
-                Notify({
-                    type: "error",
-                    message: response.message,
-                });
             }
         }
     });

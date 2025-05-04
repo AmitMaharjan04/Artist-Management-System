@@ -169,11 +169,6 @@ const edit = async (id: number) => {
             formData.value["first_release_year"] = data.first_release_year;
             formData.value["no_of_albums_released"] = data.no_of_albums_released;
         }
-    } else {
-        Notify({
-            type: "error",
-            message: response.message,
-        });
     }
 };
 const store = async () => {
@@ -199,11 +194,6 @@ const store = async () => {
         }
         return;
     }
-    Notify({
-        message: response.message,
-        ripple: true,
-        type: "error",
-    });
 };
 
 const update = async () => {
@@ -229,11 +219,6 @@ const update = async () => {
         }
         return;
     }
-    Notify({
-        message: response.message,
-        ripple: true,
-        type: "error",
-    });
 };
 
 defineExpose({ openModal, edit });

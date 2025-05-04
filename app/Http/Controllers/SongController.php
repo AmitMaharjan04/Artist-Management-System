@@ -53,4 +53,9 @@ class SongController extends Controller
         return ApiResponseHelper::success("Song deleted successfully!");
     }
 
+    public function datas()
+    {
+        $artists = $this->songService->datas();
+        return ApiResponseHelper::getData($artists);
+    }
 }

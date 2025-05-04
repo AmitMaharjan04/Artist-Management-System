@@ -78,6 +78,7 @@ import ArtistForm from "../components/ArtistForm.vue";
 import { DeleteArtist } from "@/modules/artist/api/artist";
 import { USER_ROLE } from "@/constants/constant";
 import { useAuthStore } from "@/stores/authStore";
+import { dateFilter, selectFilter } from "@/utils/tabulatorHeader";
 
 const authStore = useAuthStore();
 const fileInput = ref(null);
@@ -148,6 +149,11 @@ const handleFileUpload = async (event) => {
 
 const router = useRouter();
 
+const genderOptions = [
+    { key: "m", value: "Male" },
+    { key: "f", value: "Female" },
+    { key: "o", value: "Others" },
+];
 const artistForm = useTemplateRef<InstanceType<any>>("artistForm");
 const artistTable =
     useTemplateRef<InstanceType<typeof TabulatorTable>>("artistTable");
@@ -181,15 +187,31 @@ const columns: any[] = [
     {
         title: "Date of Birth",
         field: "dob",
-        headerFilter: "input",
+        headerFilter: dateFilter,
+        headerFilterFunc: "=",
         headerFilterLiveFilter: false,
         minWidth: 150,
+        formatter: function (cell) {
+            const value = cell.getValue();
+            if (!value) return "";
+
+            try {
+                const date = new Date(value);
+                if (isNaN(date.getTime())) return "(invalid date)";
+                const day = date.getDate().toString().padStart(2, "0");
+                const month = (date.getMonth() + 1).toString().padStart(2, "0");
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            } catch {
+                return "(invalid date)";
+            }
+        },
     },
     {
         title: "Gender",
         field: "gender",
-        headerFilter: "input",
-        headerFilterLiveFilter: false,
+        headerFilter: selectFilter(genderOptions),
+        headerFilterFunc: "=",
         minWidth: 150,
         formatter: genderFormatter,
     },
@@ -312,11 +334,6 @@ const deleteData = (data: Record<string, any>) => {
             if (response?.status === "1") {
                 Notify({ message: response.message });
                 artistTable.value?.refreshTable();
-            } else {
-                Notify({
-                    type: "error",
-                    message: response.message,
-                });
             }
         }
     });

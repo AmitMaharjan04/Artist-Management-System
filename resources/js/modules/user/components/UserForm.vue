@@ -1,4 +1,4 @@
-\<template>
+<template>
     <Modal
         ref="formModal"
         :title="editingId ? 'Edit User' : 'Add User'"
@@ -112,18 +112,27 @@ const formFields = computed<FormField[]>(() => [
         validators: ["required"],
     },
     {
+        id: "gender",
+        label: "Gender",
+        type: "select",
+        placeholder: "Select Gender",
+        options: genderOptions.value,
+        validators: ["required"],
+    },
+    {
+        id: "role_type",
+        label: "Role Type",
+        type: "select",
+        placeholder: "Select Role",
+        options: roleOptions.value,
+        validators: ["required"],
+    },
+    {
         id: "email",
         label: "Email",
         placeholder: "Email Address",
         defaultValue: "",
         validators: ["required", "email"],
-    },
-    {
-        id: "phone",
-        label: "Phone",
-        placeholder: "Phone Number",
-        defaultValue: "",
-        validators: ["required", "mobile"],
     },
     {
         id: "password",
@@ -134,6 +143,13 @@ const formFields = computed<FormField[]>(() => [
         validators: editingId.value ? [] : ["required", "min:8"],
     },
     {
+        id: "phone",
+        label: "Phone",
+        placeholder: "Phone Number",
+        defaultValue: "",
+        validators: ["required", "mobile"],
+    },
+    {
         id: "dob",
         type: "date",
         label: "Date of Birth",
@@ -142,26 +158,10 @@ const formFields = computed<FormField[]>(() => [
         validators: ["required"],
     },
     {
-        id: "gender",
-        label: "Gender",
-        type: "select",
-        placeholder: "Select Gender",
-        options: genderOptions.value,
-        validators: ["required"],
-    },
-    {
         id: "address",
         label: "Address",
         placeholder: "Enter your address",
         defaultValue: "",
-        validators: ["required"],
-    },
-    {
-        id: "role_type",
-        label: "Role Type",
-        type: "select",
-        placeholder: "Select Role",
-        options: roleOptions.value,
         validators: ["required"],
     },
 ]);
@@ -202,11 +202,6 @@ const edit = async (id: number) => {
             formData.value["address"] = data.address;
             formData.value["role_type"] = data.role_type;
         }
-    } else {
-        Notify({
-            type: "error",
-            message: response.message,
-        });
     }
 };
 const store = async () => {
@@ -232,11 +227,6 @@ const store = async () => {
         }
         return;
     }
-    Notify({
-        message: response.message,
-        ripple: true,
-        type: "error",
-    });
 };
 
 const update = async () => {
@@ -262,11 +252,6 @@ const update = async () => {
         }
         return;
     }
-    Notify({
-        message: response.message,
-        ripple: true,
-        type: "error",
-    });
 };
 
 defineExpose({ openModal, edit });

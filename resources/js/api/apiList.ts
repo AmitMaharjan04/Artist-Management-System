@@ -21,4 +21,5 @@ export default {
     songShow: "api/songs/show",
     songUpdate: "api/songs/update",
     songDelete: "api/songs/delete",
+    songDatas: "api/songs/datas",
 };

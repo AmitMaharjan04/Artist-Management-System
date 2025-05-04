@@ -20,7 +20,7 @@ const authStore = useAuthStore();
 const role = authStore.user?.role;
 let activeTab = authStore.activeTab ?? undefined;
 if(role != USER_ROLE.ARTIST) {
-    activeTab = (role === USER_ROLE.SUPER_ADMIN) ? "user" : "artist";
+    activeTab = (activeTab === '')? (role === USER_ROLE.SUPER_ADMIN ? "user" : "artist") : activeTab;
     authStore.activeTab = activeTab;
 }
 const tabs = computed(() => [

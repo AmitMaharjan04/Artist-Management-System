@@ -5,6 +5,7 @@
         <div class="my-4 text-xl font-bold">Song Lists</div>
 
     <TabulatorTable
+        v-if="dataLoaded"
         ref="songTable"
         table-id="song-index"
         :ajax-url="ApiList.songLists"
@@ -15,29 +16,47 @@
 
 <script setup lang="ts">
 import { useRouter, useRoute } from "vue-router";
-import { useTemplateRef } from "vue";
+import { computed, useTemplateRef } from "vue";
 import Swal from "sweetalert2";
 
 import ApiList from "@/api/apiList";
 import TabulatorTable from "@/components/TabulatorTable.vue";
 import { CellComponent } from "tabulator-tables";
 import { vueActionFormatter } from "@/utils/actionFormatter";
-import { GetSongList } from "@/modules/song/api/song";
+import { GetAllSongData, GetSongList } from "@/modules/song/api/song";
 import { Notify } from "@/utils/notify";
 import Button from "@/components/Button.vue";
 import SongForm from "@/modules/song/components/SongForm.vue";
 import { DeleteSong } from "@/modules/song/api/song";
+import { selectFilter } from "@/utils/tabulatorHeader";
+import { ref } from "vue";
 
 const router = useRouter();
 const route = useRoute();
-const songForm = useTemplateRef<InstanceType<any>>("songForm");
+
+const dataLoaded = ref(false);
+let artistOptions: {
+    key: string;
+    value: string;
+}[] = [];
+let genreOptions = [];
+(async () => {
+    const response = await GetAllSongData();
+    artistOptions = response.response.artists.map((artist: any) => ({
+        key: artist.id,
+        value: artist.name,
+    }));
+    genreOptions = response.response.genres;
+    dataLoaded.value = true;
+})();
+
 const songTable =
     useTemplateRef<InstanceType<typeof TabulatorTable>>("songTable");
 
 function goBackToArtist() {
     router.back();
 }
-const columns: any[] = [
+const columns = computed(() => [
     {
         title: "S.N",
         field: "sn",
@@ -63,18 +82,18 @@ const columns: any[] = [
     {
         title: "Genre",
         field: "genre",
-        headerFilter: "input",
-        headerFilterLiveFilter: false,
+        headerFilter: selectFilter(genreOptions),
+        headerFilterFunc: "=",
         minWidth: 150,
     },
     {
         title: "Artist",
-        field: "artist_id",
-        headerFilter: "input",
-        headerFilterLiveFilter: false,
+        field: "artist_name",
+        headerFilter: selectFilter(artistOptions),
+        headerFilterFunc: "=",
         minWidth: 120,
     },
-];
+]);
 
 const loadData = async (params: any) => {
     params["artist_id"] = route.params.id;
