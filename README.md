@@ -47,3 +47,9 @@
    ```
    php artisan serve
    ```
+
+7. Login as a superuser
+   ```
+   email : admin@gmail.com
+   password : admin@123
+   ```
