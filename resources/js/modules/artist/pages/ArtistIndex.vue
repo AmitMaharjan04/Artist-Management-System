@@ -2,7 +2,7 @@
     <div class="flex justify-between items-center mb-3">
         <div class="flex gap-6 items-center">
             <div class="text-xl font-bold">Artists</div>
-            <div>
+            <div v-if="authStore.user!.role === USER_ROLE.ARTIST_MANAGER">
                 <Button
                     color="primary"
                     label="Add Artist"
@@ -10,7 +10,10 @@
                 />
             </div>
         </div>
-        <div class="flex gap-3 items-center">
+        <div
+            v-if="authStore.user!.role === USER_ROLE.ARTIST_MANAGER"
+            class="flex gap-3 items-center"
+        >
             <div class="relative ml-2 cursor-help group">
                 <div
                     class="flex items-center justify-center w-5 h-5 rounded-full bg-gray-200 text-gray-700 text-xs font-bold"
@@ -73,7 +76,10 @@ import { Notify } from "@/utils/notify";
 import Button from "@/components/Button.vue";
 import ArtistForm from "../components/ArtistForm.vue";
 import { DeleteArtist } from "@/modules/artist/api/artist";
+import { USER_ROLE } from "@/constants/constant";
+import { useAuthStore } from "@/stores/authStore";
 
+const authStore = useAuthStore();
 const fileInput = ref(null);
 const importing = ref(false);
 const exportDisabled = ref(false);
@@ -219,24 +225,49 @@ const columns: any[] = [
             router,
             type: "flex",
             buttonType: "normal",
-            onlyIcon: true,
+            onlyIcon: false,
             options: [
-                {
-                    type: "action",
-                    label: "Edit",
-                    color: "text-blue-600 text-lg",
-                    icon: "fa-pen",
-                    class: "mx-2",
-                    handler: editData,
-                },
-                {
-                    type: "action",
-                    label: "Delete",
-                    icon: "fa-trash",
-                    color: "text-red-600 text-lg",
-                    class: "mx-2",
-                    handler: deleteData,
-                },
+                ...(authStore.user!.role === USER_ROLE.ARTIST_MANAGER
+                    ? [
+                          {
+                              type: "action",
+                              label: "Edit",
+                              color: "text-blue-600 text-lg",
+                              icon: "fa-pen",
+                              class: "mx-2",
+                              handler: editData,
+                          },
+                      ]
+                    : []),
+
+                ...(authStore.user!.role === USER_ROLE.ARTIST_MANAGER
+                    ? [
+                          {
+                              type: "action",
+                              label: "Delete",
+                              color: "text-red-600 text-lg",
+                              icon: "fa-trash",
+                              class: "mx-2",
+                              handler: deleteData,
+                          },
+                      ]
+                    : []),
+                ...(authStore.user!.role === USER_ROLE.ARTIST_MANAGER ||
+                authStore.user!.role === USER_ROLE.SUPER_ADMIN
+                    ? [
+                          {
+                              type: "action",
+                              label: "Songs",
+                              icon: "fa-music",
+                              color: "text-green-600 text-lg",
+                              class: "mx-2",
+                              handler: () => {
+                                  const artistId = cell.getData().id;
+                                  router.push(`/songs/artist/${artistId}`);
+                              },
+                          },
+                      ]
+                    : []),
             ],
         }),
     },

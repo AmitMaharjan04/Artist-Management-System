@@ -1,5 +1,6 @@
 <template>
-    <Tabs
+    <SongIndex v-if="role === 'artist'" />
+    <Tabs v-else
         :tabs="tabs.flat()"
         :tab-length="tabs.length"
         :show-id="activeTab"
@@ -12,16 +13,18 @@ import { computed, defineAsyncComponent, onMounted, ref } from "vue";
 import ApiList from "@/api/apiList";
 import { useAuthStore } from "@/stores/authStore";
 import Tabs from "@/components/Tabs.vue";
-
+import SongIndex from "@/modules/song/pages/SongIndex.vue";
+import { USER_ROLE } from "../constants/constant";
 const authStore = useAuthStore();
 
-const initialLoading = ref(false);
-const submitLoading = ref(false);
-const activeTab = ref<"user" | "artist">(
-    authStore.superAdmin ? "user" : "artist"
-);
+const role = authStore.user?.role;
+let activeTab = authStore.activeTab ?? undefined;
+if(role != USER_ROLE.ARTIST) {
+    activeTab = (role === USER_ROLE.SUPER_ADMIN) ? "user" : "artist";
+    authStore.activeTab = activeTab;
+}
 const tabs = computed(() => [
-    ...(authStore.superAdmin
+    ...(role === USER_ROLE.SUPER_ADMIN
         ? [
               {
                   id: "user",
@@ -42,8 +45,10 @@ const tabs = computed(() => [
         },
     ],
 ]);
+
 const changeTab = (tabId: string | number) => {
-    activeTab.value = tabId as "user" | "artist";
+    authStore.activeTab = tabId as "user" | "artist";
+    activeTab = authStore.activeTab;
 };
 
 </script>

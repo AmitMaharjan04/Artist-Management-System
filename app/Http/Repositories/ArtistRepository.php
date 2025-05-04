@@ -21,7 +21,7 @@ class ArtistRepository implements ArtistInterface
         return DB::selectOne("SELECT * FROM artist WHERE id = ?", [$id]);
     }
 
-    public function update(int $id, array $data): object
+    public function update(int|string $id, array $data): object
     {
         $setClause = implode(', ', array_map(fn($key) => "$key = ?", array_keys($data)));
         $values = array_values($data);
@@ -76,5 +76,16 @@ class ArtistRepository implements ArtistInterface
     public function find(int $id): ?object
     {
         return DB::selectOne("SELECT id, `name`, DATE(dob) as dob, gender, `address`, first_release_year, no_of_albums_released FROM artist WHERE id = ?", [$id]);
+    }
+
+    public function allArtists(): ?array
+    {
+        $results = DB::select("SELECT id, `name` FROM artist");
+        return array_map(function ($row) {
+            return [
+                'id'    => $row->id,
+                'name'  => $row->name,
+            ];
+        }, array: $results);
     }
 }

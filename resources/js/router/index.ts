@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import routes from "./routes";
 import { useAuthStore } from "@/stores/authStore";
 import { Notify } from "@/utils/notify";
+import Swal from "sweetalert2";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -25,6 +26,17 @@ router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !userAuth.accessToken) {
         Notify({ type: "error", message: "Unauthenticated" });
         return next({ name: "LoginPage" });
+    }
+    if(to.meta.requiresAuth && to.meta.authenticateWhen) {
+        const authStore = useAuthStore();
+        if (Array.isArray(to.meta.authenticateWhen) && !to.meta.authenticateWhen.includes(authStore.user?.role)) {
+            Swal.fire({
+                title: "Access Denied",
+                text: "You do not have permission to access this page.",
+                icon: "error",
+            });
+            return next({ name: "Dashboard" });
+        }
     }
     return next();
 });

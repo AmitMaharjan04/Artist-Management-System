@@ -1,8 +1,10 @@
 import { authRoutes } from "@/modules/auth/router";
+import { songRoutes } from "@/modules/song/router";
 import type { RouteRecordRaw } from "vue-router";
 
 const notLayoutRoutes: RouteRecordRaw[] = [...authRoutes];
 
+const layoutRoutes: RouteRecordRaw[] = [...songRoutes];
 const routes: RouteRecordRaw[] = [
     {
         path: "/:pathMatch(.*)*",
@@ -30,7 +32,8 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     title: "Dashboard - Artist Management System",
                 },
-            }
+            },
+            ...songRoutes,
         ],
     },
     ...notLayoutRoutes,

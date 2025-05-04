@@ -37,7 +37,7 @@ class UserRequest extends FormRequest
                 'dob'           =>  'required|date',
                 'gender'        =>  'required|in:m,f,o',
                 'address'       =>  'required|string',
-                'role_type'     =>  'required|in:superadmin,artist_manager,artist'
+                'role_type'     =>  'required|in:super_admin,artist_manager,artist'
             ];
         }
 
@@ -56,7 +56,7 @@ class UserRequest extends FormRequest
                 'dob'           =>  'required|date',
                 'gender'        =>  'required|in:m,f,o',
                 'address'       =>  'required|string',
-                'role_type'     =>  'required|in:superadmin,artist_manager,artist'
+                'role_type'     =>  'required|in:super_admin,artist_manager,artist'
             ];
         }
 

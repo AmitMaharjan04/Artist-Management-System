@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SongController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\JwtMiddleware;
 use Illuminate\Http\Request;
@@ -31,5 +32,14 @@ Route::middleware([JwtMiddleware::class])->group(function () {
         Route::patch('update',[ArtistController::class,'update']);
         Route::delete('delete',[ArtistController::class,'delete']);
         Route::post('imports',[ArtistController::class,'import']);
+        Route::get('all',[ArtistController::class,'allArtists']);
+    });
+
+    Route::prefix('songs')->group(function () {
+        Route::get('list', [SongController::class, 'index']);
+        Route::post('store',[SongController::class,'store']);
+        Route::get('show',[SongController::class,'show']);
+        Route::patch('update',[SongController::class,'update']);
+        Route::delete('delete',[SongController::class,'delete']);
     });
 });

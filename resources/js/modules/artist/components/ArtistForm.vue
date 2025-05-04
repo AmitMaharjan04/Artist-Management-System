@@ -124,9 +124,7 @@ const formFields = computed<FormField[]>(() => [
     {
         id: "first_release_year",
         label: "First Released Year",
-        // type: "select",
         placeholder: "",
-        // options: roleOptions.value,
         validators: ["required"],
     },
     {
@@ -181,7 +179,6 @@ const edit = async (id: number) => {
 const store = async () => {
     submitLoading.value = true;
     isDisabled.value = true;
-    console.log("h");
     const response = await StoreArtist(formData.value);
     submitLoading.value = false;
     isDisabled.value = false;

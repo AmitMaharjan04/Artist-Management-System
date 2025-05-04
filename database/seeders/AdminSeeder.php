@@ -24,7 +24,7 @@ class AdminSeeder extends Seeder
             'dob'           =>  '2000-01-01 00:11:22',
             'gender'        =>  'm',
             'address'       =>  '123, ABC',
-            'role_type'     =>  'superadmin'
+            'role_type'     =>  'super_admin'
         ];
         $this->userRepository->create($data);
     }

@@ -134,7 +134,7 @@ const genderOptions = ref<ObjectOption[]>([
 ]);
 
 const roleOptions = ref<ObjectOption[]>([
-    { key: "superadmin", value: "Super Admin" },
+    { key: "super_admin", value: "Super Admin" },
     { key: "artist_manager", value: "Artist Manager" },
     { key: "artist", value: "Artist" },
 ]);

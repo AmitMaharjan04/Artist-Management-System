@@ -30,11 +30,14 @@ class AuthService
 
         $token = JWT::encode($payload, config('app.jwt-key'), 'HS256');
         
-        $superAdmin = ($user->role_type === 'superadmin') ? true : false;
+        $superAdmin = ($user->role_type === 'super_admin') ? true : false;
 
         $response = [
             'superAdmin'    => $superAdmin,
-            'token'         => $token
+            'token'         => $token,
+            'user'          =>  [
+                'role'      =>  $user->role_type,
+            ]
         ];
         return $response;
     }

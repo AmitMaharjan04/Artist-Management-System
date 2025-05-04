@@ -14,4 +14,11 @@ export default {
     artistUpdate: "api/artists/update",
     artistDelete: "api/artists/delete",
     artistImport: "api/artists/imports",
+    artistsAll: "api/artists/all",
+
+    songLists: "api/songs/list",
+    songStore: "api/songs/store",
+    songShow: "api/songs/show",
+    songUpdate: "api/songs/update",
+    songDelete: "api/songs/delete",
 };

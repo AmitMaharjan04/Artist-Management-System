@@ -57,4 +57,10 @@ class ArtistController extends Controller
 
         return ApiResponseHelper::error($message);
     }
+
+    public function allArtists()
+    {
+        $artists = $this->artistRepository->allArtists();
+        return ApiResponseHelper::getData($artists);
+    }
 }

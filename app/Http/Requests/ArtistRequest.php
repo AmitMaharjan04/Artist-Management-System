@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ArtistRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the artist is authorized to make this request.
      */
     public function authorize(): bool
     {
@@ -27,8 +27,26 @@ class ArtistRequest extends FormRequest
     {
         $rules = [];
 
-        if ($this->isMethod('post') || $this->isMethod('patch')) {
+        if ($this->isMethod('post')) {
             $rules = [
+                'name'                  =>  'required|string',
+                'dob'                   =>  'required|date',
+                'gender'                =>  'required|in:m,f,o',
+                'address'               =>  'required|string',
+                'first_release_year'    =>  [
+                                                'required',
+                                                'integer',
+                                                'digits:4',
+                                                'min:1900',
+                                                'max:' . date('Y'),
+                                            ],
+                'no_of_albums_released' =>  'required|integer',
+            ];
+        }
+
+        if ($this->isMethod('patch')) {
+            $rules = [
+                'id'                    =>  'required|exists:artist,id',
                 'name'                  =>  'required|string',
                 'dob'                   =>  'required|date',
                 'gender'                =>  'required|in:m,f,o',

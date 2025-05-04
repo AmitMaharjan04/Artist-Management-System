@@ -22,7 +22,7 @@ class UserRepository implements UserInterface
         return DB::selectOne("SELECT * FROM user WHERE id = ?", [$id]);
     }
 
-    public function update(int $id, array $data): object
+    public function update(int|string $id, array $data): object
     {
         $setClause = implode(', ', array_map(fn($key) => "$key = ?", array_keys($data)));
         $values = array_values($data);

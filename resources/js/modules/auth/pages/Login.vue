@@ -143,6 +143,7 @@ async function handleSubmit(_e: Event) {
     if (response.status === "1") {
         authStore.setToken(response.response.token);
         authStore.setSuperAdmin(response.response.superAdmin);
+        authStore.setUser(response.response.user);
         destroyInstance();
         setTimeout(() => {
             router.push({ name: "Dashboard" });

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->dateTime('dob');
             $table->enum('gender', ['m', 'f', 'o']);
             $table->string('address', 255);
-            $table->enum('role_type', ['superadmin', 'artist_manager', 'artist']);
+            $table->enum('role_type', ['super_admin', 'artist_manager', 'artist']);
             $table->timestamps();
         });
 

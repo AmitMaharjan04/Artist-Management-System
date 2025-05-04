@@ -1,7 +1,7 @@
-\<template>
+<template>
     <Modal
         ref="formModal"
-        :title="editingId ? 'Edit User' : 'Add User'"
+        :title="editingId ? 'Edit Song' : 'Add Song'"
         size="3xl"
         :scrollable="true"
         @close="modalClosed"
@@ -55,11 +55,15 @@ import InputField from "@/components/Forms/InputField.vue";
 import Modal from "@/components/Modal.vue";
 import Select from "@/components/Forms/Select.vue";
 
-import { StoreUser, GetUser, UpdateUser } from "@/modules/user/api/user";
+import { StoreSong, GetSong, UpdateSong } from "@/modules/song/api/song";
 import { type FormField } from "@/utils/type";
 import { useForm } from "@/utils/useForm";
 import { Notify } from "@/utils/notify";
 import Loading from "@/components/Loading.vue";
+
+
+import { GetAllArtists } from "@/modules/artist/api/artist";
+
 
 const emits = defineEmits<{
     (event: "saved"): void;
@@ -84,84 +88,52 @@ const modalClosed = () => {
 };
 
 type ObjectOption = { [key: string]: any };
-const genderOptions = ref<ObjectOption[]>([
-    { key: "m", value: "Male" },
-    { key: "f", value: "Female" },
-    { key: "o", value: "Others" },
+const genreOptions = ref<ObjectOption[]>([
+    { key: "classic", value: "Classic" },
+    { key: "country", value: "Country" },
+    { key: "jazz", value: "Jazz" },
+    { key: "rnb", value: "RnB" },
+    { key: "rock", value: "Rock" },
 ]);
 
-const roleOptions = ref<ObjectOption[]>([
-    { key: "super_admin", value: "Super Admin" },
-    { key: "artist_manager", value: "Artist Manager" },
-    { key: "artist", value: "Artist" },
-]);
+const artistOptions = ref<ObjectOption[]>([]);
 
+(async () => {
+    const response = await GetAllArtists();
+    artistOptions.value = response.response.map((artist: any) => ({
+        key: artist.id,
+        value: artist.name,
+    }));
+})();
 const formFields = computed<FormField[]>(() => [
     {
-        id: "first_name",
-        label: "First Name",
-        placeholder: "First Name",
-        defaultValue: "",
-        validators: ["required"],
-    },
-    {
-        id: "last_name",
-        label: "Last Name",
-        placeholder: "Last Name",
-        defaultValue: "",
-        validators: ["required"],
-    },
-    {
-        id: "email",
-        label: "Email",
-        placeholder: "Email Address",
-        defaultValue: "",
-        validators: ["required", "email"],
-    },
-    {
-        id: "phone",
-        label: "Phone",
-        placeholder: "Phone Number",
-        defaultValue: "",
-        validators: ["required", "mobile"],
-    },
-    {
-        id: "password",
-        type: "password",
-        label: "Password",
-        placeholder: "Password",
-        defaultValue: "",
-        validators: editingId.value ? [] : ["required", "min:8"],
-    },
-    {
-        id: "dob",
-        type: "date",
-        label: "Date of Birth",
-        placeholder: "Date of Birth",
-        defaultValue: "",
-        validators: ["required"],
-    },
-    {
-        id: "gender",
-        label: "Gender",
+        id: "artist_id",
+        label: "Artist",
         type: "select",
-        placeholder: "Select Gender",
-        options: genderOptions.value,
+        placeholder: "Select Artist",
+        options: artistOptions.value,
         validators: ["required"],
     },
     {
-        id: "address",
-        label: "Address",
-        placeholder: "Enter your address",
+        id: "title",
+        label: "Title",
+        placeholder: "Enter Title",
         defaultValue: "",
         validators: ["required"],
     },
     {
-        id: "role_type",
-        label: "Role Type",
+        id: "album_name",
+        label: "Album Name",
+        placeholder: "Album Name",
+        defaultValue: "",
+        validators: ["required"],
+    },
+    {
+        id: "genre",
+        label: "Genre",
         type: "select",
-        placeholder: "Select Role",
-        options: roleOptions.value,
+        placeholder: "Select Genre",
+        options: genreOptions.value,
         validators: ["required"],
     },
 ]);
@@ -183,24 +155,19 @@ const save = () => {
     }
 };
 
-const edit = async (id: number) => {
+const edit = async (data: any) => {
     openModal();
-    editingId.value = id;
+    editingId.value = data.updated_at;
     fetchLoading.value = true;
-    const response = await GetUser(id);
+    const response = await GetSong(data);
     fetchLoading.value = false;
     if (response?.status === "1") {
         const data = response.response;
         if (data) {
-            formData.value["first_name"] = data.first_name;
-            formData.value["last_name"] = data.last_name;
-
-            formData.value["email"] = data.email;
-            formData.value["phone"] = data.phone;
-            formData.value["dob"] = data.dob;
-            formData.value["gender"] = data.gender;
-            formData.value["address"] = data.address;
-            formData.value["role_type"] = data.role_type;
+            formData.value["title"] = data.title;
+            formData.value["artist_id"] = data.artist_id;
+            formData.value["album_name"] = data.album_name;
+            formData.value["genre"] = data.genre;
         }
     } else {
         Notify({
@@ -212,7 +179,7 @@ const edit = async (id: number) => {
 const store = async () => {
     submitLoading.value = true;
     isDisabled.value = true;
-    const response = await StoreUser(formData.value);
+    const response = await StoreSong(formData.value);
     submitLoading.value = false;
     isDisabled.value = false;
     if (response.status === "1") {
@@ -242,7 +209,7 @@ const store = async () => {
 const update = async () => {
     submitLoading.value = true;
     isDisabled.value = true;
-    const response = await UpdateUser(editingId.value, formData.value);
+    const response = await UpdateSong(editingId.value, formData.value);
     submitLoading.value = false;
     isDisabled.value = false;
     if (response.status === "1") {

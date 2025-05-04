@@ -33,3 +33,7 @@ export const ImportArtists = async (data: any) => {
         "content-type": "multipart/form-data",
     });
 };
+
+export const GetAllArtists = async () => {
+    return await api().get<any>(ApiList.artistsAll);
+};
